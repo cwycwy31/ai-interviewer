@@ -1,15 +1,17 @@
 # ============================================================
-# llm.py
-# 作用：封装大模型调用，供 main.py / chat.py 使用
-# 说明：只负责“把 messages 发给模型，拿回文字”，不处理 HTTP、不打印
+# app/llm/client.py
+# 作用：封装大模型调用
+# 说明：只负责“把 messages 发给模型，拿回文字”
 # ============================================================
 
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
 
-# 1. 读取 .env 里的 API Key
-load_dotenv()
+from app.config import BASE_DIR
+
+# 1. 读取项目根目录的 .env
+load_dotenv(BASE_DIR / ".env")
 
 # 2. 创建客户端，指向 DeepSeek
 client = OpenAI(

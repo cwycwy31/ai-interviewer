@@ -60,7 +60,7 @@ DEEPSEEK_API_KEY=你的key
 ### 4. 运行
 
 ```powershell
-python chat.py
+python -m cli.chat
 ```
 
 示例：
@@ -76,7 +76,7 @@ AI：你叫小明……
 ### 5. 运行后端
 
 ```powershell
-uvicorn main:app --reload
+uvicorn app.main:app --reload
 ```
 
 打开 <http://127.0.0.1:8000/> 使用中文聊天页面；<http://127.0.0.1:8000/docs> 是接口文档，<http://127.0.0.1:8000/health> 用于检查服务状态。
@@ -85,16 +85,24 @@ uvicorn main:app --reload
 
 ```text
 ai-interviewer/
-├── chat.py          # 命令行多轮聊天
-├── main.py          # FastAPI 后端入口
-├── llm.py           # 模型调用封装
-├── db.py            # SQLite 读写
-├── chat.db          # 本地数据库，不提交
+├── app/
+│   ├── main.py          # FastAPI 入口
+│   ├── config.py        # 路径和常量
+│   ├── chat/
+│   │   ├── router.py    # /chat、/messages、/reset
+│   │   └── service.py   # 聊天业务
+│   ├── llm/
+│   │   └── client.py    # 模型调用
+│   └── db/
+│       └── sqlite.py    # SQLite 读写
+├── cli/
+│   └── chat.py          # 命令行聊天
 ├── static/
-│   └── index.html   # 中文聊天页面
-├── assets/          # README 用的截图
+│   └── index.html       # 中文聊天页面
+├── assets/              # README 用的截图
+├── chat.db              # 本地数据库，不提交
 ├── README.md
-├── .env             # 本地密钥，不提交
+├── .env                 # 本地密钥，不提交
 └── .gitignore
 ```
 
@@ -122,7 +130,7 @@ ai-interviewer/
 
 ## 说明
 
-README 中的截图是产品原型（假数据），只作为目标参考。正式实现已拆成 `main.py`（HTTP 接口）、`llm.py`（模型调用）、`db.py`（数据库）和 `chat.py`（命令行）。产品原型文件保留在本地 `参考/`，不提交到仓库。
+README 中的截图是产品原型（假数据），只作为目标参考。正式实现按模块放在 `app/` 和 `cli/` 下：`app/main.py`（入口）、`app/chat/`（聊天）、`app/llm/`（模型）、`app/db/`（数据库）、`cli/chat.py`（命令行）。产品原型文件保留在本地 `参考/`，不提交到仓库。
 
 ## 仓库
 

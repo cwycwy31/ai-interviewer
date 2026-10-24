@@ -1,23 +1,23 @@
 # ============================================================
-# db.py
+# app/db/sqlite.py
 # 作用：SQLite 数据库，保存对话历史
-# 说明：只负责读写数据库，不处理 HTTP、不调用模型
+# 说明：只负责读写数据库
 # ============================================================
 
 import sqlite3
 from contextlib import closing
 
-DB_PATH = "chat.db"
+from app.config import DB_PATH
 
 
 # 1. 建立数据库连接
 def get_connection():
     conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row  # 让查询结果可以用列名访问
+    conn.row_factory = sqlite3.Row
     return conn
 
 
-# 2. 建表：第一次运行自动创建，已存在就跳过
+# 2. 建表：第一次运行自动创建
 def init_db():
     with closing(get_connection()) as conn:
         conn.execute(
