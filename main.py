@@ -6,6 +6,7 @@
 # ============================================================
 
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from openai import (
     APIConnectionError,
@@ -18,7 +19,16 @@ from openai import (
 from llm import ask
 
 # 1. 创建 FastAPI 应用
-app = FastAPI(title="AI 模拟面试官 API")
+app = FastAPI(
+    title="AI 模拟面试官 API",
+    description="AI 模拟面试官的后端接口，提供健康检查和聊天能力。",
+)
+
+
+# 首页：返回中文聊天页面
+@app.get("/")
+def index():
+    return FileResponse("static/index.html")
 
 
 # 2. 请求体：前端发来的 JSON
@@ -39,13 +49,13 @@ messages = [
 
 
 # 5. 健康检查
-@app.get("/health")
+@app.get("/health", summary="健康检查")
 def health():
     return {"status": "ok"}
 
 
 # 6. 聊天接口：POST /chat
-@app.post("/chat", response_model=ChatResponse)
+@app.post("/chat", summary="聊天", response_model=ChatResponse)
 def chat(req: ChatRequest):
     # 6.1 把用户的话追加进历史
     messages.append({"role": "user", "content": req.message})
