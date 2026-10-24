@@ -2,7 +2,7 @@
 
 一个面向计算机相关专业学生的 AI 面试练习工具：根据简历和岗位 JD 生成针对性问题，进行多轮追问，并在结束后给出结构化评分报告。
 
-> **当前进度**：第 1 周，已完成命令行多轮对话、错误处理、FastAPI 聊天接口和中文网页界面；简历解析和评分报告在开发中。
+> **当前进度**：第 1 周，已完成命令行多轮对话、错误处理、FastAPI 聊天接口、中文网页界面和 SQLite 持久化；简历解析和评分报告在开发中。
 
 ![目标原型](assets/preview-setup.png)
 
@@ -17,6 +17,8 @@
 - FastAPI 后端骨架，提供 `/health` 健康检查接口
 - 提供 `POST /chat` 接口，支持多轮对话
 - 中文网页聊天界面，访问根路径 `/`
+- 对话写入 SQLite，刷新页面或重启服务后仍能看到历史
+- 「新对话」按钮可清空历史
 
 ## 技术栈
 
@@ -24,6 +26,7 @@
 - OpenAI Python SDK（兼容 DeepSeek 的 OpenAI 接口）
 - DeepSeek `deepseek-v4-flash`
 - FastAPI + Uvicorn
+- SQLite（Python 内置 `sqlite3`）
 - python-dotenv
 - Git / Gitee / GitHub
 
@@ -85,6 +88,8 @@ ai-interviewer/
 ├── chat.py          # 命令行多轮聊天
 ├── main.py          # FastAPI 后端入口
 ├── llm.py           # 模型调用封装
+├── db.py            # SQLite 读写
+├── chat.db          # 本地数据库，不提交
 ├── static/
 │   └── index.html   # 中文聊天页面
 ├── assets/          # README 用的截图
@@ -102,6 +107,7 @@ ai-interviewer/
 - [x] FastAPI 基础骨架（`/health`）
 - [x] FastAPI 聊天接口（`POST /chat`）
 - [x] 网页聊天界面
+- [x] SQLite 持久化
 - [ ] 简历 / JD 解析
 - [ ] 多轮追问与结构化评分报告
 - [ ] RAG 题库与知识库
@@ -116,7 +122,7 @@ ai-interviewer/
 
 ## 说明
 
-README 中的截图是产品原型（假数据），只作为目标参考。正式实现已拆成 `main.py`（HTTP 接口）、`llm.py`（模型调用）和 `chat.py`（命令行），后续会加 `db.py`。产品原型文件保留在本地 `参考/`，不提交到仓库。
+README 中的截图是产品原型（假数据），只作为目标参考。正式实现已拆成 `main.py`（HTTP 接口）、`llm.py`（模型调用）、`db.py`（数据库）和 `chat.py`（命令行）。产品原型文件保留在本地 `参考/`，不提交到仓库。
 
 ## 仓库
 

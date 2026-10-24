@@ -57,7 +57,19 @@
   }
   header h1 { margin: 0; font-size: 15px; font-weight: 650; }
   header p { margin: 2px 0 0; font-size: 11px; color: var(--muted); }
-  .status { margin-left: auto; font-size: 11px; color: var(--good); white-space: nowrap; }
+  .new-chat {
+    margin-left: auto;
+    min-height: 30px;
+    padding: 0 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--ink-2);
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .new-chat:hover { background: rgba(255, 255, 255, 0.05); color: var(--ink); }
+  .status { margin-left: 10px; font-size: 11px; color: var(--good); white-space: nowrap; }
 
   main {
     flex: 1;
@@ -170,6 +182,7 @@
       <h1>AI 模拟面试官</h1>
       <p>多轮追问 · 中文界面 · 本地运行</p>
     </div>
+    <button class="new-chat" id="new-chat" type="button">新对话</button>
     <div class="status" id="status">● 已连接</div>
   </header>
 
@@ -193,6 +206,8 @@
   const input = document.getElementById('input');
   const send = document.getElementById('send');
   const statusEl = document.getElementById('status');
+  const newChat = document.getElementById('new-chat');
+  const GREETING = '你好，我是你的面试教练。先做个自我介绍吧，重点讲一个你亲手做过的项目，以及你具体负责的部分。';
 
   function setStatus(text, ok) {
     statusEl.textContent = '● ' + text;
@@ -228,6 +243,28 @@
   function hideTyping() {
     const el = document.getElementById('typing');
     if (el) el.remove();
+  }
+
+  function showGreeting() {
+    chat.innerHTML = '';
+    addMessage('ai', GREETING);
+  }
+
+  async function loadHistory() {
+    try {
+      const response = await fetch('/messages');
+      if (!response.ok) return;
+      const data = await response.json();
+      if (data.messages && data.messages.length > 0) {
+        chat.innerHTML = '';
+        data.messages.forEach((message) => {
+          addMessage(message.role === 'user' ? 'user' : 'ai', message.content);
+        });
+        setStatus('已连接', true);
+      }
+    } catch (error) {
+      // 读取失败就保留默认问候
+    }
   }
 
   form.addEventListener('submit', async (event) => {
@@ -270,12 +307,28 @@
     }
   });
 
+  newChat.addEventListener('click', async () => {
+    if (!confirm('确定开始新对话？当前历史会被清空。')) return;
+
+    try {
+      const response = await fetch('/reset', { method: 'POST' });
+      if (!response.ok) throw new Error('reset failed');
+      showGreeting();
+      setStatus('已连接', true);
+    } catch (error) {
+      addMessage('ai', '清空失败，请稍后再试。');
+      setStatus('操作失败', false);
+    }
+  });
+
   input.addEventListener('keydown', (event) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
       form.requestSubmit();
     }
   });
+
+  loadHistory();
 </script>
 </body>
 </html>

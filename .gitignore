@@ -2,3 +2,5 @@
 .env
 __pycache__/
 参考/
+chat.db
+chat.db-*
