@@ -14,12 +14,14 @@
 - 输入 `exit` / `quit` / `再见` 退出
 - 常见接口错误处理：超时、401、402、429、5xx
 - 错误信息区分「用户提示」和「开发者调试详情」（`DEBUG` 开关）
+- FastAPI 后端骨架，提供 `/health` 健康检查接口
 
 ## 技术栈
 
 - Python 3.14
 - OpenAI Python SDK（兼容 DeepSeek 的 OpenAI 接口）
 - DeepSeek `deepseek-v4-flash`
+- FastAPI + Uvicorn
 - python-dotenv
 - Git / Gitee / GitHub
 
@@ -37,7 +39,7 @@ cd ai-interviewer
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
-python -m pip install openai python-dotenv
+python -m pip install openai python-dotenv fastapi "uvicorn[standard]"
 ```
 
 ### 3. 配置 API Key
@@ -66,6 +68,14 @@ AI：你叫小明……
 你：exit
 ```
 
+### 5. 运行后端
+
+```powershell
+uvicorn main:app --reload
+```
+
+打开 <http://127.0.0.1:8000/health>，看到 `{"status":"ok"}`；打开 <http://127.0.0.1:8000/docs> 可以看接口文档。
+
 ## 项目结构
 
 ```text
@@ -84,7 +94,8 @@ ai-interviewer/
 - [x] 命令行多轮对话（保存对话历史）
 - [x] 常见接口错误处理
 - [x] Git 仓库（Gitee + GitHub）
-- [ ] FastAPI 后端 + 网页聊天界面
+- [x] FastAPI 基础骨架（`/health`）
+- [ ] FastAPI 聊天接口 + 网页聊天界面
 - [ ] 简历 / JD 解析
 - [ ] 多轮追问与结构化评分报告
 - [ ] RAG 题库与知识库
