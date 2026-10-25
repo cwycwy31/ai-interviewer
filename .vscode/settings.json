@@ -1,0 +1,10 @@
+{
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/*.pyc": true,
+    "**/.venv": true,
+    ".git": true,
+    "chat.db": true,
+    "chat.db-*": true
+  }
+}
