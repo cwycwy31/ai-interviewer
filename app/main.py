@@ -32,6 +32,11 @@ def index():
 
 
 # 5. 健康检查
+@app.get("/roadmap")
+def roadmap():
+    return FileResponse(STATIC_DIR / "roadmap.html")
+
+
 @app.get("/health", summary="健康检查")
 def health():
     return {"status": "ok"}

@@ -21,6 +21,7 @@
 - 中文网页聊天界面，访问根路径 `/`
 - 对话写入 SQLite，刷新页面或重启服务后仍能看到历史
 - 「新对话」按钮可清空历史
+- 项目路线图页面，访问 `/roadmap`
 
 ## 技术栈
 
@@ -102,7 +103,8 @@ ai-interviewer/
 ├── cli/
 │   └── chat.py          # 命令行聊天
 ├── static/
-│   └── index.html       # 中文聊天页面
+│   ├── index.html       # 中文聊天页面
+│   └── roadmap.html     # 项目路线图
 ├── assets/              # README 用的截图
 ├── chat.db              # 本地数据库，不提交
 ├── README.md
@@ -125,6 +127,10 @@ ai-interviewer/
 - [ ] RAG 题库与知识库
 - [ ] 部署上线
 - [ ] 演示视频与面试话术
+
+## 项目路线图
+
+![项目路线图](assets/roadmap-preview.png)
 
 ## 项目目标
 

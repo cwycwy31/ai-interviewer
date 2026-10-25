@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>项目路线图 · AI 模拟面试官</title>
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --surface: #1a1a19;
+    --surface-2: #20201e;
+    --ink: #f0efec;
+    --ink-2: #c3c2b7;
+    --muted: #898781;
+    --border: rgba(255, 255, 255, 0.10);
+    --border-soft: rgba(255, 255, 255, 0.06);
+    --baseline: #383835;
+    --accent: #3987e5;
+    --accent-soft: rgba(57, 135, 229, 0.14);
+    --good: #0ca30c;
+    --good-soft: rgba(12, 163, 12, 0.12);
+    --font: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font);
+    font-size: 14px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    background: #111110;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    width: 34px;
+    height: 34px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #3987e5, #6250d6);
+    color: #fff;
+    font-weight: 800;
+  }
+  header h1 { margin: 0; font-size: 15px; font-weight: 650; }
+  header p { margin: 2px 0 0; font-size: 11px; color: var(--muted); }
+  .back {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    padding: 0 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--ink-2);
+    font-size: 12px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .back:hover { background: rgba(255, 255, 255, 0.05); color: var(--ink); }
+
+  main { max-width: 920px; margin: 0 auto; padding: 24px 18px 56px; }
+  .kicker { margin-bottom: 6px; color: var(--accent); font-size: 11.5px; letter-spacing: 0.04em; }
+
+  .summary {
+    margin-bottom: 16px;
+    padding: 20px;
+    border: 1px solid var(--border-soft);
+    border-radius: 16px;
+    background: var(--surface);
+  }
+  .summary-head { display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; }
+  .summary h2 { margin: 0; font-size: 22px; font-weight: 650; letter-spacing: -0.02em; }
+  .summary p { margin: 6px 0 0; color: var(--ink-2); font-size: 13px; }
+  .summary-stat { flex: none; text-align: right; }
+  .summary-stat strong { display: block; font-size: 30px; line-height: 1; letter-spacing: -0.03em; }
+  .summary-stat span { font-size: 11px; color: var(--muted); }
+  .progress {
+    height: 8px;
+    margin-top: 18px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(57, 135, 229, 0.16);
+  }
+  .progress-fill { height: 100%; border-radius: 999px; background: var(--accent); }
+  .summary-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 11px;
+  }
+
+  .phases { display: flex; flex-direction: column; gap: 12px; }
+  .phase {
+    padding: 16px 18px;
+    border: 1px solid var(--border-soft);
+    border-radius: 14px;
+    background: var(--surface);
+  }
+  .phase.done { border-left: 2px solid var(--good); }
+  .phase.current {
+    border-color: rgba(57, 135, 229, 0.45);
+    box-shadow: inset 0 0 0 1px rgba(57, 135, 229, 0.08);
+  }
+  .phase-head { display: flex; align-items: flex-start; gap: 12px; }
+  .phase-no { padding-top: 2px; color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+  .phase-head h3 { margin: 0; font-size: 14px; }
+  .phase-head p { margin: 2px 0 0; color: var(--muted); font-size: 11px; }
+  .badge { margin-left: auto; padding: 2px 8px; border-radius: 999px; font-size: 10.5px; white-space: nowrap; }
+  .badge.done { background: var(--good-soft); color: var(--good); }
+  .badge.doing { background: var(--accent-soft); color: #6da7ec; }
+  .badge.todo { border: 1px solid var(--border); color: var(--muted); }
+
+  .checks {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 20px;
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .checks li { position: relative; padding-left: 20px; color: var(--muted); font-size: 12px; }
+  .checks li::before {
+    content: "○";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--baseline);
+    font-size: 12px;
+  }
+  .checks li.done { color: var(--ink-2); }
+  .checks li.done::before { content: "✓"; color: var(--good); font-weight: 700; }
+
+  .next {
+    margin-top: 16px;
+    padding: 16px 18px;
+    border: 1px solid rgba(57, 135, 229, 0.28);
+    border-radius: 14px;
+    background: var(--accent-soft);
+  }
+  .next h3 { margin: 0 0 4px; font-size: 13px; }
+  .next p { margin: 0; color: var(--ink-2); font-size: 12px; }
+  .footnote { margin-top: 14px; color: var(--muted); font-size: 10.5px; text-align: center; }
+
+  @media (max-width: 640px) {
+    main { padding: 16px 12px 40px; }
+    header { flex-wrap: wrap; }
+    .summary-head { flex-direction: column; }
+    .summary-stat { text-align: left; }
+    .summary-meta { flex-direction: column; }
+    .checks { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="logo">M</div>
+    <div>
+      <h1>项目路线图</h1>
+      <p>8 周，从零到可投递</p>
+    </div>
+    <a class="back" href="/">← 返回聊天</a>
+  </header>
+
+  <main>
+    <section class="summary">
+      <div class="summary-head">
+        <div>
+          <div class="kicker">当前进度</div>
+          <h2>第 3 阶段 · 像个真的面试产品</h2>
+          <p>前两个阶段已完成；现在做评分报告和简历 / JD 解析。</p>
+        </div>
+        <div class="summary-stat">
+          <strong>2 / 5</strong>
+          <span>阶段完成</span>
+        </div>
+      </div>
+      <div class="progress"><div class="progress-fill" style="width:40%"></div></div>
+      <div class="summary-meta">
+        <span>已完成：第 1–2 阶段</span>
+        <span>下一项：评分报告 / 简历 JD 解析</span>
+      </div>
+    </section>
+
+    <section class="phases">
+      <article class="phase done">
+        <div class="phase-head">
+          <span class="phase-no">01</span>
+          <div><h3>第 1–2 周 · 能调用大模型</h3><p>从零到第一次真实调用</p></div>
+          <span class="badge done">已完成</span>
+        </div>
+        <ul class="checks">
+          <li class="done">环境搭建与虚拟环境</li>
+          <li class="done">拿到 API Key，跑通第一次调用</li>
+          <li class="done">命令行多轮聊天</li>
+          <li class="done">错误处理：超时、401、402、429、5xx</li>
+        </ul>
+      </article>
+
+      <article class="phase done">
+        <div class="phase-head">
+          <span class="phase-no">02</span>
+          <div><h3>第 3–4 周 · 有后端和网页</h3><p>从脚本变成服务</p></div>
+          <span class="badge done">已完成</span>
+        </div>
+        <ul class="checks">
+          <li class="done">FastAPI 后端</li>
+          <li class="done">POST /chat 接口</li>
+          <li class="done">中文网页聊天界面</li>
+          <li class="done">SQLite 保存历史</li>
+          <li class="done">Git：Gitee + GitHub</li>
+          <li class="done">README + 项目结构说明</li>
+        </ul>
+      </article>
+
+      <article class="phase current">
+        <div class="phase-head">
+          <span class="phase-no">03</span>
+          <div><h3>第 5–6 周 · 像个真的面试产品</h3><p>简历、追问、评分</p></div>
+          <span class="badge doing">进行中</span>
+        </div>
+        <ul class="checks">
+          <li class="done">多轮对话上下文</li>
+          <li>评分报告：POST /report</li>
+          <li>简历 / JD 解析</li>
+          <li>按回答生成追问</li>
+          <li>结构化评分 JSON</li>
+          <li>RAG 题库与知识库</li>
+        </ul>
+      </article>
+
+      <article class="phase">
+        <div class="phase-head">
+          <span class="phase-no">04</span>
+          <div><h3>第 7–8 周 · 能投递</h3><p>上线、演示、讲清楚</p></div>
+          <span class="badge todo">待开始</span>
+        </div>
+        <ul class="checks">
+          <li>部署到公网</li>
+          <li>登录 / 限流 / 成本控制</li>
+          <li>3 分钟演示视频</li>
+          <li>面试话术：架构、取舍、踩坑</li>
+        </ul>
+      </article>
+
+      <article class="phase">
+        <div class="phase-head">
+          <span class="phase-no">05</span>
+          <div><h3>以后 · 体验和商业化</h3><p>等核心跑通再加</p></div>
+          <span class="badge todo">待开始</span>
+        </div>
+        <ul class="checks">
+          <li>语音作答（ASR + TTS）</li>
+          <li>摄像头与表情提示</li>
+          <li>实时提示 / 提示卡</li>
+          <li>导出 PDF、分享报告</li>
+          <li>历史对比与进步曲线</li>
+          <li>付费 / 校园推广</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="next">
+      <h3>下一步只做一件事</h3>
+      <p>二选一：先做评分报告（POST /report），或先做简历 / JD 解析。选定后写进 进度.md。</p>
+    </section>
+    <p class="footnote">这份页面是静态的；每完成一项，回来把对应的圆圈改成勾。</p>
+  </main>
+</body>
+</html>
