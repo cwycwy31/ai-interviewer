@@ -83,6 +83,8 @@ uvicorn app.main:app --reload
 
 ## 项目结构
 
+> 每个文件的中文说明见 [项目结构.md](项目结构.md)。
+
 ```text
 ai-interviewer/
 ├── app/
